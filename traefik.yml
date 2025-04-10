@@ -1,0 +1,26 @@
+http:
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  routers:
+    django:
+      rule: "Host(`teljoo.com`)"
+      entryPoints:
+        - websecure
+      service: django
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    django:
+      loadBalancer:
+        servers:
+          - url: "http://web:8000"
+
+tls:
+  certificates:
+    - certFile: /etc/traefik/certs/teljoo.com.crt
+      keyFile: /etc/traefik/certs/teljoo.com.key 
